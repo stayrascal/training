@@ -1,0 +1,44 @@
+#
+#spring:
+#  jpa:
+#    hibernate:
+#      ddl-auto: validate
+#
+#  datasource:
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost/skeleton
+#    username: rascal
+#    password: rascal
+#
+#    max-active: 50
+#    max-idle: 5
+#    min-idle: 5
+#    initial-size: 10
+#
+#    validation-query: select 1;
+#    test-on-borrow: true
+#
+#    time-between-eviction-runs-millis: 60000
+#    min-evictable-idle-time-millis: 30000
+#
+#    schema: classpath:/data/mysql/schema.sql
+#    data: classpath:/data/mysql/data.sql
+#
+## Actuator Configuration
+#management:
+#  context-path: /actuators
+#
+#info:
+#  build:
+#    groupId: @project.groupId@
+#    artifact: @project.artifact@
+#    name: @project.name@
+#    description: @project.description@
+#    version: @project.version@
+#
+## Logging Configuration
+#logging:
+#  level:
+#    com:
+#      thoughtworks: DEBUG
+#
