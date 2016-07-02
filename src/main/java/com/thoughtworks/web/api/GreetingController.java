@@ -1,22 +1,29 @@
-package com.thoughtworks.web;
+package com.thoughtworks.web.api;
 
 import com.thoughtworks.model.Greeting;
+import com.thoughtworks.model.errors.Error;
+import com.thoughtworks.model.errors.Errors;
 import com.thoughtworks.service.GreetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @RestController
-@RequestMapping("/greeting")
 public class GreetingController extends BaseController {
 
     @Autowired
     private GreetingService greetingService;
 
-    @RequestMapping(value = "/{userName}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/{userName}", method = RequestMethod.GET)
     public ResponseEntity<String> sayHello(@PathVariable String userName) {
         return new ResponseEntity<>(userName, HttpStatus.OK);
     }
@@ -31,9 +38,18 @@ public class GreetingController extends BaseController {
         return ResponseEntity.ok(greetingService.findOne(id));
     }
 
-    @RequestMapping(value = "/api/greetings", method = RequestMethod.POST)
-    public ResponseEntity<Greeting> createGreeting(@RequestBody Greeting greeting) {
+    @RequestMapping(value = "/api/greetings", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity createGreeting(@Valid @RequestBody Greeting greeting, BindingResult result) {
+        if (result.hasErrors()) {
+            return handleErrors(result.getAllErrors());
+        }
         return new ResponseEntity<>(greetingService.create(greeting), HttpStatus.CREATED);
+    }
+
+    private ResponseEntity handleErrors(List<ObjectError> allErrors) {
+        List<Error> errors = new ArrayList<>();
+        allErrors.forEach(error -> errors.add(new Error(HttpStatus.BAD_REQUEST.value(), "validation error", error.getDefaultMessage())));
+        return new ResponseEntity(new Errors(errors), HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/api/greetings", method = RequestMethod.PUT)

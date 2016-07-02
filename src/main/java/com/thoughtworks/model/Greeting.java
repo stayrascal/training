@@ -1,14 +1,16 @@
 package com.thoughtworks.model;
 
+import com.thoughtworks.validation.annotation.ValidText;
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
 
 @Entity
 public class Greeting extends BaseEntity {
 
     private static final long serialVersionUID = 8807080843569617685L;
 
-    @NotNull
+    @ValidText(field = "just for test", message = "{text.other}")
     private String text;
 
     public Greeting() {

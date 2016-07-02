@@ -4,11 +4,11 @@ package com.thoughtworks.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RequestContext {
+public class RequestContextUtil {
 
-    private static Logger logger = LoggerFactory.getLogger(RequestContext.class);
+    private static Logger logger = LoggerFactory.getLogger(RequestContextUtil.class);
 
-    private RequestContext() {
+    private RequestContextUtil() {
     }
 
     private static ThreadLocal<String> usernames = new ThreadLocal<>();
@@ -19,7 +19,7 @@ public class RequestContext {
 
     public static void setUsername(String username) {
         usernames.set(username);
-        logger.debug("RequestContext added username {} to current thread", username);
+        logger.debug("RequestContextUtil added username {} to current thread", username);
     }
 
     public static void init() {

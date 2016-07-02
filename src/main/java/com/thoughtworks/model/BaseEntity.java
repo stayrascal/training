@@ -1,7 +1,6 @@
 package com.thoughtworks.model;
 
-import com.thoughtworks.util.RequestContext;
-import org.hibernate.annotations.Type;
+import com.thoughtworks.util.RequestContextUtil;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -97,9 +96,9 @@ public class BaseEntity implements Serializable {
 
     @PrePersist
     public void beforePersist() {
-        String username = RequestContext.getUsername();
+        String username = RequestContextUtil.getUsername();
         if (username == null) {
-            throw new IllegalArgumentException("Cannot update a BaseEntity without a username in the RequestContext for this thread.");
+            throw new IllegalArgumentException("Cannot update a BaseEntity without a username in the RequestContextUtil for this thread.");
         }
         setCreatedBy(username);
         setUpdatedTime(new DateTime());
@@ -107,9 +106,9 @@ public class BaseEntity implements Serializable {
 
     @PreUpdate
     public void beforeUpdate() {
-        String username = RequestContext.getUsername();
+        String username = RequestContextUtil.getUsername();
         if (username == null) {
-            throw new IllegalArgumentException("Cannot update a BaseEntity without a username in the RequestContext for this thread.");
+            throw new IllegalArgumentException("Cannot update a BaseEntity without a username in the RequestContextUtil for this thread.");
         }
         setUpdatedBy(username);
         setUpdatedTime(new DateTime());
